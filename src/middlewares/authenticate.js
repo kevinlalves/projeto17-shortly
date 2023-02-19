@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { jwtSecret } from '../utils/constants/jwt';
+import { jwtSecret } from '../utils/constants/jwt.js';
 
-const autheticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization?.replace('Bearer ', '');
 
@@ -10,16 +10,12 @@ const autheticate = async (req, res, next) => {
   }
 
   try {
-    const { userId } = jwt.verify(token, jwtSecret);
-
-    res.locals = { userId };
+    req.Params = { ...jwt.verify(token, jwtSecret), ...req.Params };
   } catch (error) {
-    console.log(error);
-
     return res.status(401).send();
   }
 
   next();
 };
 
-export default autheticate;
+export default authenticate;
