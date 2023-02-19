@@ -10,6 +10,6 @@ const router = new Router();
 router.get('/:id', processRequestParams(idOnlySchema), showUrl);
 router.get('/open/:shortUrl', processRequestParams(openUrlSchema), openUrl);
 router.post('/shorten', processRequestParams(createUrlSchema), authenticate, createUrl);
-router.delete('/:id', processRequestParams(idOnlySchema), deleteUrl);
+router.delete('/:id', processRequestParams(idOnlySchema), authenticate, deleteUrl);
 
 export { router as urlsRouter };

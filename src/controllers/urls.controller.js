@@ -3,7 +3,7 @@ import db from '../database/database.connection.js';
 import internalError from '../utils/functions/internalError.js';
 import { nanoid } from 'nanoid';
 import { idSize } from '../utils/constants/nanoid.js';
-import { createUrlQuery, showUrlQuery } from '../queries/urls.queries.js';
+import { createUrlQuery, deleteUrlQuery, showUrlQuery } from '../queries/urls.queries.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
 
 export const showUrl = async (req, res) => {
@@ -42,4 +42,17 @@ export const createUrl = async (req, res) => {
   }
 };
 
-export const deleteUrl = async (req, res) => {};
+export const deleteUrl = async (req, res) => {
+  const { userId, id } = req.Params;
+  console.log(`DELETE /urls/${id}`);
+
+  try {
+    const { rowCount } = await db.query(deleteUrlQuery(), [id, userId]);
+
+    if (rowCount === 0) return res.status(404).send('Url not found');
+
+    return res.status(204).send();
+  } catch (error) {
+    internalError(error, res);
+  }
+};
