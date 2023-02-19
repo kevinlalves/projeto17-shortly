@@ -8,9 +8,10 @@ export const showUrlQuery = () => `
 `;
 
 export const openUrlQuery = () => `
-  SELECT url
-  FROM urls
-  WHERE short_url = $1;
+  UPDATE urls
+  SET visit_count = visit_count + 1
+  WHERE short_url = $1
+  RETURNING url;
 `;
 
 export const createUrlQuery = () => `
