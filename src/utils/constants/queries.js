@@ -1,1 +1,1 @@
-export const standardBatch = 1000;
+export const standardBatch = 10;

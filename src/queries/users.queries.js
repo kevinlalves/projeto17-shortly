@@ -17,8 +17,22 @@ export const showCurrentUserQuery = () => `
       )
     ) AS "shortenedUrls"
   FROM users
-  JOIN urls
+  LEFT JOIN urls
   ON users.id = urls.user_id
   WHERE users.id = $1
   GROUP BY users.id;
+`;
+
+export const rankUsersQuery = (orietation) => `
+  SELECT
+    users.id,
+    users.name,
+    COUNT(urls.id) AS "linksCount",
+    SUM(urls.visit_count) AS "visitCount"
+  FROM users
+  LEFT JOIN urls
+  ON users.id = urls.user_id
+  GROUP BY users.id
+  OFFSET $1
+  LIMIT $2;
 `;
