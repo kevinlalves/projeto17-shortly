@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { idSize } from '../utils/constants/nanoid.js';
+import { idSize, nanoidAlphabet } from '../utils/constants/nanoid.js';
 
 export const createUrlSchema = Joi.object({
   url: Joi.string()
@@ -8,5 +8,5 @@ export const createUrlSchema = Joi.object({
 });
 
 export const openUrlSchema = Joi.object({
-  shortUrl: Joi.string().max(idSize).required(),
+  shortUrl: Joi.string().max(idSize).regex(nanoidAlphabet).required(),
 });

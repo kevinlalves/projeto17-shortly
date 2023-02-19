@@ -7,6 +7,12 @@ export const showUrlQuery = () => `
   WHERE id = $1;
 `;
 
+export const openUrlQuery = () => `
+  SELECT url
+  FROM urls
+  WHERE short_url = $1;
+`;
+
 export const createUrlQuery = () => `
   INSERT INTO urls (url, short_url, user_id) VALUES
   ($1, $2, $3);

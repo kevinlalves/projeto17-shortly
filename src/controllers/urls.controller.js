@@ -3,7 +3,7 @@ import db from '../database/database.connection.js';
 import internalError from '../utils/functions/internalError.js';
 import { nanoid } from 'nanoid';
 import { idSize } from '../utils/constants/nanoid.js';
-import { createUrlQuery, deleteUrlQuery, showUrlQuery } from '../queries/urls.queries.js';
+import { createUrlQuery, deleteUrlQuery, openUrlQuery, showUrlQuery } from '../queries/urls.queries.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
 
 export const showUrl = async (req, res) => {
@@ -23,7 +23,22 @@ export const showUrl = async (req, res) => {
   }
 };
 
-export const openUrl = async (req, res) => {};
+export const openUrl = async (req, res) => {
+  const { shortUrl } = req.Params;
+  console.log(chalk.cyan(`GET /urls/open/${shortUrl}`));
+
+  try {
+    const {
+      rows: [url],
+    } = await db.query(openUrlQuery(), [shortUrl]);
+
+    if (!url) return res.status(404).send('Url not found');
+
+    return res.redirect(url.url);
+  } catch (error) {
+    internalError(error, res);
+  }
+};
 
 export const createUrl = async (req, res) => {
   const { userId, url } = req.Params;
@@ -44,7 +59,7 @@ export const createUrl = async (req, res) => {
 
 export const deleteUrl = async (req, res) => {
   const { userId, id } = req.Params;
-  console.log(`DELETE /urls/${id}`);
+  console.log(chalk.cyan(`DELETE /urls/${id}`));
 
   try {
     const { rowCount } = await db.query(deleteUrlQuery(), [id, userId]);
