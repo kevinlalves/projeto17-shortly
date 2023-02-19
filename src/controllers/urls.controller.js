@@ -3,10 +3,25 @@ import db from '../database/database.connection.js';
 import internalError from '../utils/functions/internalError.js';
 import { nanoid } from 'nanoid';
 import { idSize } from '../utils/constants/nanoid.js';
-import { createUrlQuery } from '../queries/urls.queries.js';
+import { createUrlQuery, showUrlQuery } from '../queries/urls.queries.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
 
-export const showUrl = async (req, res) => {};
+export const showUrl = async (req, res) => {
+  const { id } = req.Params;
+  console.log(chalk.cyan(`GET /urls/${id}`));
+
+  try {
+    const {
+      rows: [url],
+    } = await db.query(showUrlQuery(), [id]);
+
+    if (!url) return res.status(404).send('Url not found');
+
+    return res.json(url);
+  } catch (error) {
+    internalError(error, res);
+  }
+};
 
 export const openUrl = async (req, res) => {};
 

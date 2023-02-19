@@ -8,11 +8,11 @@ import { saltRounds } from '../utils/constants/bcrypt.js';
 import { standardBatch } from '../utils/constants/queries.js';
 
 export const rankUsers = async (req, res) => {
-  const { limit = standardBatch, offset = 0, orietation = 'desc' } = req.Params;
+  const { limit = standardBatch, offset = 0, orientation = 'desc' } = req.Params;
   console.log(chalk.cyan('GET /ranking'));
 
   try {
-    const { rows: users } = await db.query(rankUsersQuery(orietation), [offset, limit]);
+    const { rows: users } = await db.query(rankUsersQuery(orientation), [offset, limit]);
 
     return res.json(users);
   } catch (error) {

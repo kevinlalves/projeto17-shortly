@@ -23,7 +23,7 @@ export const showCurrentUserQuery = () => `
   GROUP BY users.id;
 `;
 
-export const rankUsersQuery = (orietation) => `
+export const rankUsersQuery = (orientation) => `
   SELECT
     users.id,
     users.name,
@@ -33,6 +33,7 @@ export const rankUsersQuery = (orietation) => `
   LEFT JOIN urls
   ON users.id = urls.user_id
   GROUP BY users.id
+  ORDER BY "visitCount" ${orientation}
   OFFSET $1
   LIMIT $2;
 `;
