@@ -15,8 +15,8 @@ app.use(cors());
 app.use(json());
 app.use(helmet());
 
-app.use('/', usersRouter);
 app.use('/urls', urlsRouter);
+app.use('/', usersRouter);
 app.use('/', authRouter);
 
 if (process.env.NODE_ENV === 'production') {

@@ -1,2 +1,3 @@
 addSupportToUuid
 createTriggerToUpdateUpdatedAt
+createUsersTable
