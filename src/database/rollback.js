@@ -33,7 +33,8 @@ const rollback = async () => {
     console.log(`error running rollback ${migrationsList[lastMigration]}`);
     console.log(error);
   }
-  process.exit();
+
+  if (process.env.NODE_ENV === 'development') process.exit();
 };
 
 rollback();

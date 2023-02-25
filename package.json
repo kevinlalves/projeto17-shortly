@@ -5,8 +5,9 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production node src/app.js",
+    "start": "NODE_ENV=development node src/app.js",
     "dev": "NODE_ENV=development nodemon src/app.js",
+    "deploy": "NODE_ENV=production node src/app.js",
     "migrate": "NODE_ENV=development node src/database/migrate.js",
     "rollback": "NODE_ENV=development node src/database/rollback.js",
     "create-migration": "NODE_ENV=development node src/database/createMigration.js",

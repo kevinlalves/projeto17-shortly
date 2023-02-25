@@ -38,7 +38,8 @@ const migrate = async () => {
   }
 
   await fs.promises.writeFile('./src/database/lastMigration.txt', `${migrationsList.length - 1}`, 'utf-8');
-  process.exit();
+
+  if (process.env.NODE_ENV === 'development') process.exit();
 };
 
 migrate();
