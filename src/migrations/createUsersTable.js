@@ -8,8 +8,7 @@ export const up = async () => {
         name text NOT NULL,
         email text NOT NULL UNIQUE,
         password text NOT NULL,
-        created_at timestamptz NOT NULL DEFAULT now(),
-        updated_at timestamptz NOT NULL DEFAULT now()
+        created_at timestamptz NOT NULL DEFAULT now()
       );
 
       SELECT create_update_trigger('users');

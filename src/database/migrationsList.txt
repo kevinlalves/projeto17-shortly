@@ -1,3 +1,2 @@
-createTriggerToUpdateUpdatedAt
 createUsersTable
 createUrlsTable

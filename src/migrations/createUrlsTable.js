@@ -9,8 +9,7 @@ export const up = async () => {
         url text NOT NULL UNIQUE,
         visit_count integer NOT NULL DEFAULT 0,
         user_id serial NOT NULL REFERENCES users,
-        created_at timestamptz NOT NULL DEFAULT now(),
-        updated_at timestamptz NOT NULL DEFAULT now()
+        created_at timestamptz NOT NULL DEFAULT now()
       );
 
       SELECT create_update_trigger('urls');
