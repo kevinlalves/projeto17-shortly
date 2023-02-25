@@ -8,5 +8,5 @@ export const createUrlSchema = Joi.object({
 });
 
 export const openUrlSchema = Joi.object({
-  shortUrl: Joi.string().max(idSize).regex(nanoidAlphabet).required(),
+  shortUrl: Joi.string().required(),
 });
