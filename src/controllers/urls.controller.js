@@ -47,9 +47,11 @@ export const createUrl = async (req, res) => {
   const shortUrl = nanoid(idSize);
 
   try {
-    await db.query(createUrlQuery(), [url, shortUrl, userId]);
+    const {
+      rows: [newUrl],
+    } = await db.query(createUrlQuery(), [url, shortUrl, userId]);
 
-    return res.status(201).send();
+    return res.status(201).send(newUrl);
   } catch (error) {
     if (error.code === valueAlreadyExistsError) return res.status(409).send('Url already registered');
 
