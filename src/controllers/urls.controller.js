@@ -51,7 +51,7 @@ export const createUrl = async (req, res) => {
       rows: [newUrl],
     } = await db.query(createUrlQuery(), [url, shortUrl, userId]);
 
-    return res.status(201).send(newUrl);
+    return res.status(201).json(newUrl);
   } catch (error) {
     if (error.code === valueAlreadyExistsError) return res.status(409).send('Url already registered');
 
