@@ -10,8 +10,6 @@ export const up = async () => {
         password text NOT NULL,
         created_at timestamptz NOT NULL DEFAULT now()
       );
-
-      SELECT create_update_trigger('users');
     `);
   } catch (error) {
     return error;

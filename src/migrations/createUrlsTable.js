@@ -11,8 +11,6 @@ export const up = async () => {
         user_id serial NOT NULL REFERENCES users,
         created_at timestamptz NOT NULL DEFAULT now()
       );
-
-      SELECT create_update_trigger('urls');
     `);
   } catch (error) {
     return error;
