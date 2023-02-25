@@ -4,11 +4,11 @@ export const up = async () => {
   try {
     await db.query(`
       CREATE TABLE urls (
-        id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+        id serial PRIMARY KEY,
         short_url text NOT NULL UNIQUE,
         url text NOT NULL UNIQUE,
         visit_count integer NOT NULL DEFAULT 0,
-        user_id uuid NOT NULL REFERENCES users,
+        user_id serial NOT NULL REFERENCES users,
         created_at timestamptz NOT NULL DEFAULT now(),
         updated_at timestamptz NOT NULL DEFAULT now()
       );

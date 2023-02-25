@@ -17,20 +17,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
-
-
---
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
-
-
---
 -- Name: create_update_trigger(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -73,14 +59,54 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.urls (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    id integer NOT NULL,
     short_url text NOT NULL,
     url text NOT NULL,
     visit_count integer DEFAULT 0 NOT NULL,
-    user_id uuid NOT NULL,
+    user_id integer NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
+
+
+--
+-- Name: urls_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.urls_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: urls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.urls_id_seq OWNED BY public.urls.id;
+
+
+--
+-- Name: urls_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.urls_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: urls_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.urls_user_id_seq OWNED BY public.urls.user_id;
 
 
 --
@@ -88,7 +114,7 @@ CREATE TABLE public.urls (
 --
 
 CREATE TABLE public.users (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    id integer NOT NULL,
     name text NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
@@ -98,20 +124,77 @@ CREATE TABLE public.users (
 
 
 --
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: urls id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls ALTER COLUMN id SET DEFAULT nextval('public.urls_id_seq'::regclass);
+
+
+--
+-- Name: urls user_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls ALTER COLUMN user_id SET DEFAULT nextval('public.urls_user_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.urls VALUES ('d596d78c-9ee9-47f7-a75e-b74474271f8e', 'puwsvx9xAFbi', 'https://9anime.pl', 0, 'bf093d74-bbd3-4c9d-b8f2-853875cac4aa', '2023-02-19 21:18:44.192141+00', '2023-02-19 21:18:44.192141+00');
-INSERT INTO public.urls VALUES ('3fb667c8-4acc-4964-8abe-c371c868ec2d', 'wyH2cj6JyjSc', 'https://bing.com', 2, '73c0dcf7-4ae8-48e4-8c3f-f88e253b6780', '2023-02-19 21:54:47.068357+00', '2023-02-19 21:58:58.653707+00');
-INSERT INTO public.urls VALUES ('0cc70adb-29be-4096-8511-dfe52b56108b', 'g3sPBvJ7oOTp', 'https://chat.openai.com', 1, '73c0dcf7-4ae8-48e4-8c3f-f88e253b6780', '2023-02-19 21:54:21.131167+00', '2023-02-19 22:00:38.817237+00');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES ('bf093d74-bbd3-4c9d-b8f2-853875cac4aa', 'kevin', 'test@gmail.com', '$2b$10$0tu5xfQaw2954GrkPPfWVuzT9P/imBVK46fhe9dw3Jn.Y2xD1.WTW', '2023-02-19 19:55:39.531603+00', '2023-02-19 19:55:39.531603+00');
-INSERT INTO public.users VALUES ('73c0dcf7-4ae8-48e4-8c3f-f88e253b6780', 'caio', 'caio@gmail.com', '$2b$10$Sgng2OVmKJaUOTDtMVI2NeOSZkBUYzzEieKoTUI8c8JrR90FOF2ai', '2023-02-19 21:52:21.129878+00', '2023-02-19 21:52:21.129878+00');
+
+
+--
+-- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
+
+
+--
+-- Name: urls_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.urls_user_id_seq', 1, false);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --

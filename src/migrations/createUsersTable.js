@@ -4,7 +4,7 @@ export const up = async () => {
   try {
     await db.query(`
       CREATE TABLE users (
-        id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+        id serial PRIMARY KEY,
         name text NOT NULL,
         email text NOT NULL UNIQUE,
         password text NOT NULL,
