@@ -1,14 +1,15 @@
 import fs from 'fs';
+import { lastMigrationPath, migrationListPath } from '../utils/constants/migratons.js';
 
 const migrate = async () => {
-  let data = await fs.promises.readFile('./src/database/migrationsList.txt', 'utf-8');
+  let data = await fs.promises.readFile(migrationListPath, 'utf-8');
   const migrationsList = data.trim().split('\n');
 
   try {
-    data = await fs.promises.readFile('./src/database/lastMigration.txt', 'utf-8');
+    data = await fs.promises.readFile(lastMigrationPath, 'utf-8');
   } catch (error) {
     if (error.code === 'ENOENT') {
-      await fs.promises.writeFile('./src/database/lastMigration.txt', '-1', 'utf-8');
+      await fs.promises.writeFile(lastMigrationPath, '-1', 'utf-8');
 
       data = '-1';
     } else {
@@ -29,7 +30,7 @@ const migrate = async () => {
 
       console.log(`migrated ${migrationsList[migrationIndex]} successfully!`);
     } catch (error) {
-      await fs.promises.writeFile('./src/database/lastMigration.txt', `${migrationIndex - 1}`, 'utf-8');
+      await fs.promises.writeFile(lastMigrationPath, `${migrationIndex - 1}`, 'utf-8');
 
       console.log(`error running migration ${migrationsList[migrationIndex]}`);
       console.log(error);
@@ -37,7 +38,7 @@ const migrate = async () => {
     }
   }
 
-  await fs.promises.writeFile('./src/database/lastMigration.txt', `${migrationsList.length - 1}`, 'utf-8');
+  await fs.promises.writeFile(lastMigrationPath, `${migrationsList.length - 1}`, 'utf-8');
 
   if (process.env.NODE_ENV === 'development') process.exit();
 };

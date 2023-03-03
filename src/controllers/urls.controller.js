@@ -1,10 +1,9 @@
 import chalk from 'chalk';
-import db from '../database/database.connection.js';
 import internalError from '../utils/functions/internalError.js';
 import { nanoid } from 'nanoid';
 import { idSize } from '../utils/constants/nanoid.js';
-import { createUrlQuery, deleteUrlQuery, openUrlQuery, showUrlQuery } from '../queries/urls.queries.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
+import { createUrlRecord, deleteUrlRecord, getShortUrl, getUrl } from '../repositories/urls.repository.js';
 
 export const showUrl = async (req, res) => {
   const { id } = req.Params;
@@ -13,7 +12,7 @@ export const showUrl = async (req, res) => {
   try {
     const {
       rows: [url],
-    } = await db.query(showUrlQuery(), [id]);
+    } = await getUrl(id);
 
     if (!url) return res.status(404).send('Url not found');
 
@@ -30,7 +29,7 @@ export const openUrl = async (req, res) => {
   try {
     const {
       rows: [url],
-    } = await db.query(openUrlQuery(), [shortUrl]);
+    } = await getShortUrl(shortUrl);
 
     if (!url) return res.status(404).send('Url not found');
 
@@ -49,7 +48,7 @@ export const createUrl = async (req, res) => {
   try {
     const {
       rows: [newUrl],
-    } = await db.query(createUrlQuery(), [url, shortUrl, userId]);
+    } = await createUrlRecord({ url, shortUrl, userId });
 
     return res.status(201).json(newUrl);
   } catch (error) {
@@ -66,7 +65,7 @@ export const deleteUrl = async (req, res) => {
   try {
     const {
       rows: [{ code }],
-    } = await db.query(deleteUrlQuery(), [id, userId]);
+    } = await deleteUrlRecord({ id, userId });
 
     return res.status(code).send();
   } catch (error) {
