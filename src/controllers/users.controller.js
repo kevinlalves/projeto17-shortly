@@ -1,18 +1,17 @@
 import chalk from 'chalk';
-import db from '../database/database.connection.js';
-import { rankUsersQuery, showCurrentUserQuery, signupQuery } from '../queries/users.queries.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
 import internalError from '../utils/functions/internalError.js';
 import bcrypt from 'bcrypt';
 import { saltRounds } from '../utils/constants/bcrypt.js';
 import { standardBatch } from '../utils/constants/queries.js';
+import { createUser, getCurrentUser, getUsersRanked } from '../repositories/users.repository.js';
 
 export const rankUsers = async (req, res) => {
   const { limit = standardBatch, offset = 0, orientation = 'desc' } = req.Params;
   console.log(chalk.cyan('GET /ranking'));
 
   try {
-    const { rows: users } = await db.query(rankUsersQuery(orientation), [offset, limit]);
+    const { rows: users } = await getUsersRanked({ orientation, offset, limit });
 
     return res.json(users);
   } catch (error) {
@@ -27,7 +26,7 @@ export const showCurrentUser = async (req, res) => {
   try {
     const {
       rows: [user],
-    } = await db.query(showCurrentUserQuery(), [userId]);
+    } = await getCurrentUser(userId);
 
     return res.json(user);
   } catch (error) {
@@ -41,7 +40,7 @@ export const signup = async (req, res) => {
 
   try {
     const encryptedPassword = await bcrypt.hash(password, saltRounds);
-    await db.query(signupQuery(), [name, email, encryptedPassword]);
+    await createUser({ name, email, encryptedPassword });
 
     return res.status(201).send();
   } catch (error) {
