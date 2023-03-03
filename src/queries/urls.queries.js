@@ -21,7 +21,19 @@ export const createUrlQuery = () => `
 `;
 
 export const deleteUrlQuery = () => `
-  DELETE FROM urls
-  WHERE id = $1
-  AND user_id = $2;
-`;
+  WITH url_to_delete AS (
+    SELECT id FROM urls WHERE id = $1
+  ),
+  deleted_rows AS (
+    DELETE FROM urls WHERE id = $1 AND user_id = $2
+    RETURNING id
+  )
+  SELECT CASE
+           WHEN EXISTS(SELECT * FROM url_to_delete) THEN
+             CASE
+               WHEN EXISTS(SELECT * FROM deleted_rows) THEN 204
+               ELSE 401
+             END
+           ELSE 404
+         END AS code;
+  `;

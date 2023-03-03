@@ -64,11 +64,11 @@ export const deleteUrl = async (req, res) => {
   console.log(chalk.cyan(`DELETE /urls/${id}`));
 
   try {
-    const { rowCount } = await db.query(deleteUrlQuery(), [id, userId]);
+    const {
+      rows: [{ code }],
+    } = await db.query(deleteUrlQuery(), [id, userId]);
 
-    if (rowCount === 0) return res.status(404).send('Url not found');
-
-    return res.status(204).send();
+    return res.status(code).send();
   } catch (error) {
     internalError(error, res);
   }
