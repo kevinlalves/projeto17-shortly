@@ -1,4 +1,4 @@
-import express, { json, Application } from 'express';
+import express, { json, Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import chalk from 'chalk';
@@ -14,6 +14,8 @@ const { PORT } = process.env;
 app.use(cors());
 app.use(json());
 app.use(helmet());
+
+app.get('/health-check', (req: Request, res: Response) => res.send());
 
 app.use('/urls', urlsRouter);
 app.use('/', usersRouter);
