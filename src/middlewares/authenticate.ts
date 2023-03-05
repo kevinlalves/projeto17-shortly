@@ -2,19 +2,21 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { jwtSecret } from '../utils/constants/jwt.js';
 
-const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { authorization } = req.headers;
   const token = authorization?.replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).send();
+    res.status(401).send();
+    return;
   }
 
   try {
     const { userId } = jwt.verify(token, jwtSecret) as { userId: string };
-    req.params = { userId, ...req.params };
+    res.locals = { userId, ...res.locals };
   } catch (error) {
-    return res.status(401).send();
+    res.status(401).send();
+    return;
   }
 
   next();

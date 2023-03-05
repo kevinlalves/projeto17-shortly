@@ -5,11 +5,10 @@ import { idSize } from '../utils/constants/nanoid.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
 import { createUrlRecord, deleteUrlRecord, getShortUrl, getUrl } from '../repositories/urls.repository.js';
 import { Request, Response } from 'express';
-import { ErrnoException } from '../types/utils/errors.js';
-import { ParamsDictionary } from 'express-serve-static-core';
+import { ErrnoException } from '../types/error.js';
 
-export const showUrl = async (req: Request, res: Response) => {
-  const { id }: ParamsDictionary = req.params;
+export const showUrl = async (req: Request, res: Response): Promise<void> => {
+  const { id } = res.locals as { id: string };
   console.log(chalk.cyan(`GET /urls/${id}`));
 
   try {
@@ -17,16 +16,19 @@ export const showUrl = async (req: Request, res: Response) => {
       rows: [url],
     } = await getUrl(id);
 
-    if (!url) return res.status(404).send('Url not found');
+    if (!url) {
+      res.status(404).send('Url not found');
+      return;
+    }
 
-    return res.json(url);
+    res.json(url);
   } catch (error) {
     internalError(error as ErrnoException, res);
   }
 };
 
-export const openUrl = async (req: Request, res: Response) => {
-  const { shortUrl }: ParamsDictionary = req.params;
+export const openUrl = async (req: Request, res: Response): Promise<void> => {
+  const { shortUrl } = res.locals as { shortUrl: string };
   console.log(chalk.cyan(`GET /urls/open/${shortUrl}`));
 
   try {
@@ -34,16 +36,19 @@ export const openUrl = async (req: Request, res: Response) => {
       rows: [url],
     } = await getShortUrl(shortUrl);
 
-    if (!url) return res.status(404).send('Url not found');
+    if (!url) {
+      res.status(404).send('Url not found');
+      return;
+    }
 
-    return res.redirect(url.url);
+    res.redirect(url.url);
   } catch (error) {
     internalError(error as ErrnoException, res);
   }
 };
 
-export const createUrl = async (req: Request, res: Response) => {
-  const { userId, url }: ParamsDictionary = req.params;
+export const createUrl = async (req: Request, res: Response): Promise<void> => {
+  const { userId, url } = res.locals as { userId: string; url: string };
   console.log(chalk.cyan('POST /urls/shorten'));
 
   const shortUrl = nanoid(idSize);
@@ -53,17 +58,19 @@ export const createUrl = async (req: Request, res: Response) => {
       rows: [newUrl],
     } = await createUrlRecord({ url, shortUrl, userId });
 
-    return res.status(201).json(newUrl);
+    res.status(201).json(newUrl);
   } catch (error) {
-    if ((error as ErrnoException).code === valueAlreadyExistsError)
-      return res.status(409).send('Url already registered');
+    if ((error as ErrnoException).code === valueAlreadyExistsError) {
+      res.status(409).send('Url already registered');
+      return;
+    }
 
     internalError(error as ErrnoException, res);
   }
 };
 
-export const deleteUrl = async (req: Request, res: Response) => {
-  const { userId, id }: ParamsDictionary = req.params;
+export const deleteUrl = async (req: Request, res: Response): Promise<void> => {
+  const { userId, id } = res.locals as { userId: string; id: string };
   console.log(chalk.cyan(`DELETE /urls/${id}`));
 
   try {
@@ -71,7 +78,7 @@ export const deleteUrl = async (req: Request, res: Response) => {
       rows: [{ code }],
     } = await deleteUrlRecord({ id, userId });
 
-    return res.status(code).send();
+    res.status(code).send();
   } catch (error) {
     internalError(error as ErrnoException, res);
   }

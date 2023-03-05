@@ -1,7 +1,7 @@
-export const valueAlreadyExistsError: string = '23505';
+export const valueAlreadyExistsError = '23505';
 
-export const foreingKeyConstraint: string = '23503';
+export const foreingKeyConstraint = '23503';
 
-export const customConstraint: string = 'P0001';
+export const customConstraint = 'P0001';
 
-export const databaseAlreadyExists: string = '42P04';
+export const databaseAlreadyExists = '42P04';

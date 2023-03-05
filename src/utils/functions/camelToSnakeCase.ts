@@ -1,7 +1,7 @@
 import { upperCaseLetter } from '../constants/regex.js';
 
 const camelToSnakeCase = (camelCaseString: string): string => {
-  let snakeCaseString: string = '';
+  let snakeCaseString = '';
 
   for (const letter of camelCaseString) {
     snakeCaseString += upperCaseLetter.test(letter) ? `_${letter.toLowerCase()}` : letter;

@@ -103,6 +103,6 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["**/*.ts", "src/types/utils/objects.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }

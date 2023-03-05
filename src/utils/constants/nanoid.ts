@@ -1,3 +1,3 @@
-export const idSize: number = 12;
+export const idSize = 12;
 
-export const nanoidAlphabet: RegExp = /^[A-Za-z0-9_-]+$/;
+export const nanoidAlphabet = /^[A-Za-z0-9_-]+$/;

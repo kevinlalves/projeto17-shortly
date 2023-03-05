@@ -1,12 +1,12 @@
-import { ParamsDictionary } from 'express-serve-static-core';
 import Joi, { ObjectSchema } from 'joi';
+import { GenericObject } from '../types/object';
 
-export const createUrlSchema: ObjectSchema<ParamsDictionary> = Joi.object({
+export const createUrlSchema: ObjectSchema<GenericObject> = Joi.object({
   url: Joi.string()
     .uri({ scheme: ['http', 'https'] })
     .required(),
 });
 
-export const openUrlSchema: ObjectSchema<ParamsDictionary> = Joi.object({
+export const openUrlSchema: ObjectSchema<GenericObject> = Joi.object({
   shortUrl: Joi.string().required(),
 });

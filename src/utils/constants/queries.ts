@@ -1,1 +1,1 @@
-export const standardBatch: string = '10';
+export const standardBatch = 10;

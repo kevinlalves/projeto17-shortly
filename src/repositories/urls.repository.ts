@@ -1,4 +1,3 @@
-import { ParamsDictionary } from 'express-serve-static-core';
 import db from '../database/database.connection.js';
 
 export const getUrl = (id: string) =>
@@ -25,7 +24,7 @@ export const getShortUrl = (shortUrl: string) =>
     [shortUrl]
   );
 
-export const createUrlRecord = ({ url, shortUrl, userId }: ParamsDictionary) =>
+export const createUrlRecord = ({ url, shortUrl, userId }: { [key: string]: string }) =>
   db.query(
     `
       INSERT INTO urls (url, short_url, user_id) VALUES
@@ -35,7 +34,7 @@ export const createUrlRecord = ({ url, shortUrl, userId }: ParamsDictionary) =>
     [url, shortUrl, userId]
   );
 
-export const deleteUrlRecord = ({ id, userId }: ParamsDictionary) =>
+export const deleteUrlRecord = ({ id, userId }: { id: string; userId: string }) =>
   db.query(
     `
       WITH url_to_delete AS (

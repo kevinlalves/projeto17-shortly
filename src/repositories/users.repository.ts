@@ -1,7 +1,14 @@
-import { ParamsDictionary } from 'express-serve-static-core';
 import db from '../database/database.connection.js';
 
-export const getUsersRanked = ({ orientation, offset, limit }: ParamsDictionary) =>
+export const getUsersRanked = ({
+  orientation,
+  offset,
+  limit,
+}: {
+  orientation: string;
+  offset: number;
+  limit: number;
+}) =>
   db.query(
     `
       SELECT
@@ -44,7 +51,7 @@ export const getCurrentUser = (userId: string) =>
     [userId]
   );
 
-export const createUser = ({ name, email, encryptedPassword }: ParamsDictionary) =>
+export const createUser = ({ name, email, encryptedPassword }: { [key: string]: string }) =>
   db.query(
     `
       INSERT INTO users (name, email, password) VALUES
