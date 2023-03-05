@@ -1,4 +1,6 @@
+import { QueryResult } from 'pg';
 import db from '../database/database.connection.js';
+import { User } from '../types/user.js';
 
 export const getUsersRanked = ({
   orientation,
@@ -8,7 +10,7 @@ export const getUsersRanked = ({
   orientation: string;
   offset: number;
   limit: number;
-}) =>
+}): Promise<QueryResult<User>> =>
   db.query(
     `
       SELECT
@@ -27,7 +29,7 @@ export const getUsersRanked = ({
     [offset, limit]
   );
 
-export const getCurrentUser = (userId: string) =>
+export const getCurrentUser = (userId: string): Promise<QueryResult<User>> =>
   db.query(
     `
       SELECT

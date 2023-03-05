@@ -7,7 +7,7 @@
   "scripts": {
     "start": "NODE_ENV=production node dist/app.js",
     "dev": "NODE_ENV=development nodemon src/app.ts",
-    "build": "rm -f dist && tsc",
+    "build": "rm -rf dist && tsc",
     "migrate": "NODE_ENV=development node dist/database/migrate.js",
     "rollback": "NODE_ENV=development node dist/database/rollback.js",
     "create-migration": "NODE_ENV=development node dist/database/createMigration.js",

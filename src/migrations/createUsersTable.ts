@@ -1,4 +1,5 @@
 import db from '../database/database.connection.js';
+import { ErrnoException } from '../types/error.js';
 
 export const up = async () => {
   try {
@@ -12,7 +13,7 @@ export const up = async () => {
       );
     `);
   } catch (error) {
-    return error;
+    return error as ErrnoException;
   }
 };
 
@@ -20,6 +21,6 @@ export const down = async () => {
   try {
     await db.query('DROP TABLE users;');
   } catch (error) {
-    return error;
+    return error as ErrnoException;
   }
 };

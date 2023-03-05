@@ -13,20 +13,20 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const {
-      rows: [user],
+      rows: [credentials],
     } = await findEmail(email);
-    if (!user) {
+    if (!credentials) {
       res.status(401).send('Invalid credentials');
       return;
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, credentials.password);
     if (!isValidPassword) {
       res.status(401).send('Invalid credentials');
       return;
     }
 
-    const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: jwtTokenDuration });
+    const token = jwt.sign({ userId: credentials.userId }, jwtSecret, { expiresIn: jwtTokenDuration });
 
     res.json({ token });
   } catch (error) {

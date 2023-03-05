@@ -1,6 +1,8 @@
+import { QueryResult } from 'pg';
 import db from '../database/database.connection.js';
+import { Url } from '../types/url.js';
 
-export const getUrl = (id: string) =>
+export const getUrl = (id: string): Promise<QueryResult<Url>> =>
   db.query(
     `
       SELECT
@@ -13,7 +15,7 @@ export const getUrl = (id: string) =>
     [id]
   );
 
-export const getShortUrl = (shortUrl: string) =>
+export const getShortUrl = (shortUrl: string): Promise<QueryResult<{ url: string }>> =>
   db.query(
     `
       UPDATE urls
@@ -24,7 +26,7 @@ export const getShortUrl = (shortUrl: string) =>
     [shortUrl]
   );
 
-export const createUrlRecord = ({ url, shortUrl, userId }: { [key: string]: string }) =>
+export const createUrlRecord = ({ url, shortUrl, userId }: { [key: string]: string }): Promise<QueryResult<Url>> =>
   db.query(
     `
       INSERT INTO urls (url, short_url, user_id) VALUES
@@ -34,7 +36,13 @@ export const createUrlRecord = ({ url, shortUrl, userId }: { [key: string]: stri
     [url, shortUrl, userId]
   );
 
-export const deleteUrlRecord = ({ id, userId }: { id: string; userId: string }) =>
+export const deleteUrlRecord = ({
+  id,
+  userId,
+}: {
+  id: string;
+  userId: string;
+}): Promise<QueryResult<{ code: number }>> =>
   db.query(
     `
       WITH url_to_delete AS (

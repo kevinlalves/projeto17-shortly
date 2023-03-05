@@ -1,5 +1,5 @@
 import db from '../database/database.connection.js';
-import { ErrnoException } from '../types/utils/errors.js';
+import { ErrnoException } from '../types/error.js';
 
 export const up = async () => {
   try {

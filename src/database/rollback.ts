@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { ErrnoException } from '../types/utils/errors.js';
+import { ErrnoException } from '../types/error.js';
 import { lastMigrationPath, migrationListPath } from '../utils/constants/migrations.js';
 
 const rollback = async () => {
